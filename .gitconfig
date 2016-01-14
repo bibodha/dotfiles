@@ -1,0 +1,25 @@
+[core]
+	editor = vim
+[mergetool "filemerge"]
+  cmd = /Applications/Xcode.app/Contents/Applications/FileMerge.app
+[difftool "filediff"]
+  path = /Applications/Xcode.app/Contents/Applications/FileMerge.app
+[merge]
+  tool = filemerge
+[diff]
+  tool = filediff
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	type = cat-file -t
+	dump = cat-file -p
+[color]
+	ui = true
+[user]
+	email = bibodha@gmail.com
+	name = Bibodha Neupane
+[push]
+	default = upstream
