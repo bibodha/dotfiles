@@ -1,13 +1,17 @@
 [core]
 	editor = vim
-[mergetool "filemerge"]
-  cmd = /Applications/Xcode.app/Contents/Applications/FileMerge.app
-[difftool "filediff"]
-  path = /Applications/Xcode.app/Contents/Applications/FileMerge.app
 [merge]
-  tool = filemerge
+  keepBackup = false
+	tool = p4merge
+[mergetool "p4merge"]
+	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge "\"$PWD/$BASE\"" "\"$PWD/$REMOTE\"" "\"$PWD/$LOCAL\"" "\"$PWD/$MERGED\""
+	keepTemporaries = false
+	trustExitCode = false
+	keepBackup = false
 [diff]
-  tool = filediff
+    tool = p4merge
+[difftool "p4merge"]
+	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge "\"$REMOTE\"" "\"$LOCAL\""
 [alias]
 	co = checkout
 	ci = commit

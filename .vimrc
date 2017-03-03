@@ -1,3 +1,125 @@
+"NeoBundle Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
+endif
+
+if has('nvim')
+ let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+ nmap <BS> <C-W>h
+else
+ map <C-H> <C-W><C-H>
+endif
+
+" Required:
+set runtimepath^=/Users/biboneup/.vim/bundle/neobundle.vim/
+
+" Required:
+call neobundle#begin(expand('/Users/biboneup/.vim/bundle'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Add or remove your Bundles here:
+NeoBundle 'mileszs/ack.vim'
+NeoBundle 'Shougo/neosnippet.vim'
+NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'wesQ3/vim-windowswap'
+
+" Ctrl P
+NeoBundle 'ctrlpvim/ctrlp.vim'
+
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_extensions = ['tag', 'buffertag', 'line', 'funky']
+let g:ctrlp_custom_ignore = {
+     \ 'dir': 'node_modules\|DS_Store\|git',
+     \ 'file': '\v\.(exe|so|dll|cs|pdb|csproj|xml)$' 
+     \ }
+
+" End Ctrl P
+
+NeoBundle 'ternjs/tern_for_vim'
+NeoBundle 'flazz/vim-colorschemes'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'jiangmiao/auto-pairs'
+NeoBundle 'crusoexia/vim-monokai'
+NeoBundle 'othree/javascript-libraries-syntax.vim'
+NeoBundle 'dkprice/vim-easygrep'
+NeoBundle 'maksimr/vim-jsbeautify'
+NeoBundle 'christoomey/vim-tmux-navigator'
+" Begin NerdCommenter
+NeoBundle 'scrooloose/nerdcommenter'
+
+let NERDSpaceDelims=1
+
+" End NerdCommenter
+" Begin Airline
+NeoBundle 'vim-airline/vim-airline'
+NeoBundle 'vim-airline/vim-airline-themes'
+
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'simple'
+" End Airline
+
+NeoBundle 'SirVer/ultisnips'
+NeoBundle 'honza/vim-snippets'
+NeoBundle 'mxw/vim-jsx'
+NeoBundle 'groenewege/vim-less'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'mtscout6/syntastic-local-eslint.vim'
+NeoBundle 'editorconfig/editorconfig-vim'
+" YCM begin
+NeoBundle 'Valloric/YouCompleteMe', {
+      \ 'build' : {
+      \     'mac': './install.py --tern-completer'
+      \   },
+      \ }
+
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
+
+" YCM end
+NeoBundleLazy 'alvan/vim-closetag', {
+  \   'autoload': {
+  \     'filetypes': [
+  \        'html',
+  \        'xml',
+  \        'javascript'
+  \      ]
+  \   }
+  \ }
+
+" fonts
+NeoBundle 'powerline/fonts', {
+      \ 'build' : {
+      \     'mac': './install.sh'
+      \   },
+      \ }
+
+" fonts end
+
+" " You can specify revision/branch/tag.
+NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5'  }
+
+NeoBundle 'vim-scripts/nerdtree-ack'
+
+" Required:
+call neobundle#end()
+
+" Required:
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+"End NeoBundle Scripts-------------------------"
+
+let g:closetag_filenames = "*.html, *.js"
+
 set nocompatible        " vim > vi mode.
 let mapleader = ","    " change <leader> from \ to ,
 
@@ -8,11 +130,13 @@ if has('gui_running')
     set transparency=2
 else
     if exists('$TMUX')
-        let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-        let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+      let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+      let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+      let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
     else
-        let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-        let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+      let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+      let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+      let &t_EI = "\<Esc>]50;CursorShape=0\x7"
     endif
 endif
 
@@ -21,16 +145,34 @@ endif
 "set wildmode=list:longest,full
 "set wildignore+=*.o,*.obj,.git,*.pyc.
 "set wildignore+=*/.git/*
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 
 " Windows General
 set wildignore+=.git\*,.sass-cache\\*,*.orig,*.cache,*.nupkg,*.exe
 
 "
-" Pathogen
+" Syntastic
 "
-call pathogen#infect()
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_enable_signs = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_error_symbol = "✗"
+let g:syntastic_warning_symbol = "⚠"
+
+
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsSnippetsDir='~/.vim/snippets'
+
+map <leader>esd :let g:syntastic_debug = 1<CR>
+map <leader>esp :let g:syntastic_debug = 0<CR>
 
 filetype off
 
@@ -41,7 +183,7 @@ map <leader>v :sp ~/.vimrc<CR><C-W>
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 set t_Co=256 " For 256 color mode support
-colorscheme wombat256mod
+colorscheme monokai
 
 "
 " Moving around / editing
@@ -53,6 +195,9 @@ set showmatch          " Show matched paren when balanced
 set matchtime=2        " for .2 seconds
 set linebreak          " Don't wrap text in the middle of a word
 set mouse=a            " Always enable mouse
+if !has('nvim')
+  set ttymouse=xterm2
+endif
 set clipboard+=unnamed  " Makes using clipboard easier
 
 "
@@ -103,7 +248,7 @@ set fdm=manual          " Fold Method
 "
 " Display
 "
-"set guifont=DejaVu_Sans_Mono:h10:cANSI
+set guifont=DejaVu_Sans_Mono:h10:cANSI
 if has("gui_gtk2")
   set guifont=Ubuntu\ Mono\ 11,Anonymous\ Pro\ 11,DejaVu\ Sans\ Mono\ 11
 elseif has("gui_win32")
@@ -274,5 +419,36 @@ def EvaluateCurrentRange():
 EOF
 endif
 
+" NERDTress File highlighting
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd FileType nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd FileType nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+
+call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('less', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
+
+" test highlight just the glyph (icons) in nerdtree:
+autocmd filetype nerdtree highlight haskell_icon ctermbg=none ctermfg=Red guifg=#ffa500
+autocmd filetype nerdtree highlight html_icon ctermbg=none ctermfg=Red guifg=#ffa500
+autocmd filetype nerdtree highlight go_icon ctermbg=none ctermfg=Red guifg=#ffa500
+
+autocmd filetype nerdtree syn match haskell_icon ## containedin=NERDTreeFile
+" if you are using another syn highlight for a given line (e.g.
+" NERDTreeHighlightFile) need to give that name in the 'containedin' for this
+" other highlight to work with it
+autocmd filetype nerdtree syn match html_icon ## containedin=NERDTreeFile,html
+autocmd filetype nerdtree syn match go_icon ## containedin=NERDTreeFile
 
 let javascript_enable_domhtmlcss=1
